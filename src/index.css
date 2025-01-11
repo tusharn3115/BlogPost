@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "CustomFont";
+  src: url("./src/fonts/a34f9d1faa5f3315-s.p.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
-    background-color: #111;
+  background-color: #000;
+  font-family: "CustomFont";
 }
