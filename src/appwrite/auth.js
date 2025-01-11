@@ -17,7 +17,7 @@ export class AuthService {
         try {
             const userAccount = await this.account.create(ID.unique(), email, password, name)
             if(userAccount) {
-                
+                return this.login
             } else {
               return userAccount   
             }
@@ -34,6 +34,9 @@ export class AuthService {
             throw error
         }
     }
+
+
+    
 }
 
 const authService = new AuthService()
