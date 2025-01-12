@@ -1,61 +1,48 @@
 import config from "../config/config";
 import { Client, Account, ID } from "appwrite";
 
-
-export class AuthService {
-    client = new Client()
-    account;
-
+class AuthService {
     constructor() {
-        this.client
+        this.client = new Client()
             .setEndpoint(config.appWriteUrl)
-            .setProject(config.appWriteProjectId)
-        this.account = new Account(this.client)
+            .setProject(config.appWriteProjectId);
+        this.account = new Account(this.client);
     }
 
-    async createAccount({email, password, name}) {
+    async createAccount({ email, password, name }) {
         try {
-            const userAccount = await this.account.create(ID.unique(), email, password, name)
-            if(userAccount) {
-                return this.login
-            } else {
-              return userAccount   
-            }
+            const userAccount = await this.account.create(ID.unique(), email, password, name);
+            return userAccount ? this.login({ email, password }) : null;
         } catch (error) {
-            throw error
+            throw new Error(`Account creation failed: ${error.message}`);
         }
     }
 
-    
-    async login({email, password}) {
+    async login({ email, password }) {
         try {
-            return await this.account.createEmailSession(email, password)
+            return await this.account.createEmailSession(email, password);
         } catch (error) {
-            throw error
+            throw new Error(`Login failed: ${error.message}`);
         }
     }
-
 
     async getCurrentUser() {
         try {
             return await this.account.get();
         } catch (error) {
-            throw error
+            throw new Error(`Failed to fetch current user: ${error.message}`);
         }
-
-        return null;
-    }   
-
+    }
 
     async logout() {
         try {
-            await this.account.deleteSessions()
+            await this.account.deleteSessions();
         } catch (error) {
-            throw error
+            throw new Error(`Logout failed: ${error.message}`);
         }
     }
 }
 
-const authService = new AuthService()
-
-export default authService
+// Export a singleton instance of AuthService
+const authService = new AuthService();
+export default authService;
