@@ -20,7 +20,7 @@ class AuthService {
 
     async login({ email, password }) {
         try {
-            return await this.account.createEmailSession(email, password);
+            return await this.account.createEmaiSession(email, password);
         } catch (error) {
             throw new Error(`Login failed: ${error.message}`);
         }
